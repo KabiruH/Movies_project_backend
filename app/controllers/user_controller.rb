@@ -1,51 +1,51 @@
 # frozen_string_literal: true
 
 class UserController < AppController
-
+  set :default_content_type, 'application/json'
+ 
   configure do
         enable :cross_origin
       end 
   # @helper: read JSON body
-    before do
-      begin
-        @user = user_data
-      rescue
-        @user = nil
-      end
-    end
+  before do
+    response.headers['Access-Control-Allow-Origin'] = '*'
+  end
+
+  options "*" do
+    response.headers["Allow"] = "GET, PUT, POST, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    200
+  end
+
+  get "/user" do
+    users = User.all
+    users.to_json
+  end
   
     #@method: create a new user
     post '/auth/register' do
       begin
-        x = User.create(@user)
-        json_response(code: 201, data: x)
+        data = JSON.parse(request.body.read)
+        users = User.create(data)
+        users.to_json
       rescue => e
-        error_response(422, e)
+          error_response(422, e)
       end
-    end
+  end
   
     #@method: log in user using email and password
     post '/auth/login' do
-      begin
-        user_data = User.find_by(email: @user['email'])
-        if user_data.password == @user['password']
-          json_response(code: 200, data: {
-            id: user_data.id,
-            email: user_data.email
-          })
-        else
-          json_response(code: 422, data: { message: "Your email/password combination is not correct" })
-        end
-      rescue => e
-        error_response(422, e)
+      request.body.rewind
+      request_payload = JSON.parse(request.body.read)
+      email = request_payload['email']
+      password = request_payload['password'].to_i
+      user = User.find{ |u| u[:email] == email && u[:password] == password }
+      if user
+        {message: "Login success!"}.to_json
+      else
+        {message: "Invalid email or password"}.to_json
       end
-    end
-  
-    private
-  
-    # @helper: parse user JSON data
-    def user_data
-      JSON.parse(request.body.read)
+    
     end
   
   end

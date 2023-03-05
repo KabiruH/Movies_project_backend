@@ -6,8 +6,8 @@ class CreateMovies < ActiveRecord::Migration[6.1]
       t.string :title
       t.integer :year
       t.string :description
-      t.string :image_url
       t.integer :user_id
+      t.boolean :fetched_first
     end
 
   end

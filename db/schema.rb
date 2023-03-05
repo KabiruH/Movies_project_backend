@@ -15,8 +15,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_02_105307) do
     t.string "title"
     t.integer "year"
     t.string "description"
-    t.string "image_url"
     t.integer "user_id"
+    t.boolean "fetched_first"
   end
 
   create_table "users", force: :cascade do |t|
