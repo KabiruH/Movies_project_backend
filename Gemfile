@@ -20,6 +20,8 @@ gem 'faker', "~> 2.18"
 
 gem 'bcrypt', '~> 3.1', '>= 3.1.18'
 
+gem 'rack-cors', '~> 2.0'
+
 group :development do
     gem "pry"
 end
