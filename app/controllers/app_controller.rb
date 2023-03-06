@@ -10,16 +10,20 @@ end
 
 post '/create' do
     begin
-        data = JSON.parse(request.body.read)
-        data["fetched_first"] = false
-        movies = Movie.create(data)
-        movies.to_json
+      data = JSON.parse(request.body.read)
+      data["fetched_first"] = false
+      movies = Movie.create(data)
+      status 201
+      { movies: movies.to_json }.to_json
+    rescue JSON::ParserError => e
+      status 400
+      { error: "Invalid JSON: #{e.message}" }.to_json
     rescue => e 
-        {
-            error: e.message
-        }.to_json
-end
-end 
+      logger.error e.message
+      status 500
+      { error: "Internal server error" }.to_json
+    end
+  end
 
 get '/search' do
     query = params[:query]

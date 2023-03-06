@@ -38,7 +38,7 @@ class UserController < AppController
       request.body.rewind
       request_payload = JSON.parse(request.body.read)
       email = request_payload['email']
-      password = request_payload['password'].to_i
+      password = request_payload['password']
       user = User.find{ |u| u[:email] == email && u[:password] == password }
       if user
         {message: "Login success!"}.to_json
