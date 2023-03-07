@@ -1,12 +1,19 @@
 # Description
 
 This is a backend program, that should allow a user to:
+
     Create their own account
+    
     Login
+    
     View movies in the account
+    
     Add their own movies
+    
     Update the movies
+    
     Delete their added movies
+    
     
  The backend is deployed in https://movies-backend3.onrender.com/movies
 
